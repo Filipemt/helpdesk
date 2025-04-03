@@ -109,11 +109,7 @@ Retorna todas as alterações feitas em um chamado específico.
 - **Spring Data JPA** (Persistência de dados)
 - **Spring Web** (Criação da API REST)
 - **Banco de Dados** (MySQL, PostgreSQL ou outro de sua escolha)
-- **Docker** (Para conteinerização, opcional)
+- **Docker** (Para conteinerização)
 
 ---
 
-## 🔥 Considerações Finais
-Este projeto serve como uma base para um sistema de helpdesk completo. Você pode expandi-lo adicionando autenticação, notificações por e-mail e relatórios de chamados.
-
-Boa codificação! 🚀
