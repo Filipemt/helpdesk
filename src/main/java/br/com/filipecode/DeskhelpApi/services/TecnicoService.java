@@ -2,9 +2,7 @@ package br.com.filipecode.DeskhelpApi.services;
 
 import br.com.filipecode.DeskhelpApi.model.dtos.TecnicoDTO;
 import br.com.filipecode.DeskhelpApi.model.dtos.TecnicoRespostaDTO;
-import br.com.filipecode.DeskhelpApi.model.dtos.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.model.entities.Tecnico;
-import br.com.filipecode.DeskhelpApi.model.entities.Usuario;
 import br.com.filipecode.DeskhelpApi.repositories.TecnicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,8 +27,36 @@ public class TecnicoService {
         return tecnicoRepository.save(tecnico);
     }
 
+    public TecnicoRespostaDTO atualizarTecnico(UUID id, TecnicoDTO tecnicoDTO) {
+        return tecnicoRepository.findById(id)
+                .map(tecnico -> {
+                    tecnico.setNome(tecnicoDTO.nome());
+                    tecnico.setEmail(tecnicoDTO.email());
+                    tecnico.setEspecializacao(tecnicoDTO.especializacao());
+                    tecnicoRepository.save(tecnico);
+
+                    return new TecnicoRespostaDTO(
+                            tecnico.getId(),
+                            tecnico.getNome(),
+                            tecnico.getEmail(),
+                            tecnico.getEspecializacao()
+                    );
+                })
+                .orElseThrow(() -> new RuntimeException("Tecnico não encontrado!"));
+    }
+
     public Optional<Tecnico> listarPorId(UUID id) {
         return tecnicoRepository.findById(id);
+    }
+
+    public Optional<TecnicoRespostaDTO> buscarDetalhesPorId(UUID id) {
+        return tecnicoRepository.findById(id)
+                .map(tecnico -> new TecnicoRespostaDTO(
+                        tecnico.getId(),
+                        tecnico.getNome(),
+                        tecnico.getEmail(),
+                        tecnico.getEspecializacao()
+                ));
     }
 
     public List<TecnicoRespostaDTO> filtarTecnico(String especializacao) {
@@ -51,21 +77,6 @@ public class TecnicoService {
                     ))
                     .collect(Collectors.toList());
 
-    }
-
-    public Tecnico atualizarTecnico(UUID id, TecnicoDTO tecnicoDTO) {
-        Optional<Tecnico> tecnicoExistente = tecnicoRepository.findById(id);
-
-        if (tecnicoExistente.isPresent()) {
-            Tecnico tecnico = new Tecnico();
-            tecnico.setNome(tecnicoDTO.nome());
-            tecnico.setEmail(tecnicoDTO.email());
-            tecnico.setEspecializacao(tecnicoDTO.especializacao());
-
-            return tecnicoRepository.save(tecnico);
-        } else {
-            throw new RuntimeException("Usuário não encontrado! ");
-        }
     }
 
     public void deletarPorId(UUID id) {
