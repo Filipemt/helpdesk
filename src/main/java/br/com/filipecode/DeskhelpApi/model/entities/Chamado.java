@@ -33,11 +33,14 @@ public class Chamado {
     @Enumerated(EnumType.STRING)
     private Prioridade prioridade;
 
-    @Column(nullable = false)
-    private LocalDateTime data_criacao;
+    @Column(name = "data_criacao", nullable = false)
+    private LocalDateTime dataCriacao;
 
-    private LocalDateTime data_atualizacao;
-    private LocalDateTime data_fechamento;
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "data_fechamento")
+    private LocalDateTime dataFechamento;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
