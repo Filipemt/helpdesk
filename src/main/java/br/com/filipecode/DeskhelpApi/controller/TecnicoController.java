@@ -38,9 +38,9 @@ public class TecnicoController {
     public ResponseEntity<Object> atualizarTecnico(@PathVariable String id,
                                                        @RequestBody TecnicoDTO tecnicoDTO) {
         UUID tecnicoId = UUID.fromString(id);
-        TecnicoRespostaDTO tecnicoRespostaDTO = tecnicoService.atualizarTecnico(tecnicoId, tecnicoDTO);
+        tecnicoService.atualizarTecnico(tecnicoId, tecnicoDTO);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{id}")

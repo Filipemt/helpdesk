@@ -27,22 +27,16 @@ public class TecnicoService {
         return tecnicoRepository.save(tecnico);
     }
 
-    public TecnicoRespostaDTO atualizarTecnico(UUID id, TecnicoDTO tecnicoDTO) {
-        return tecnicoRepository.findById(id)
-                .map(tecnico -> {
-                    tecnico.setNome(tecnicoDTO.nome());
-                    tecnico.setEmail(tecnicoDTO.email());
-                    tecnico.setEspecializacao(tecnicoDTO.especializacao());
-                    tecnicoRepository.save(tecnico);
-
-                    return new TecnicoRespostaDTO(
-                            tecnico.getId(),
-                            tecnico.getNome(),
-                            tecnico.getEmail(),
-                            tecnico.getEspecializacao()
-                    );
-                })
+    public void atualizarTecnico(UUID id, TecnicoDTO tecnicoDTO) {
+        Tecnico tecnico = tecnicoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Tecnico não encontrado!"));
+
+        tecnico.setNome(tecnicoDTO.nome());
+        tecnico.setEmail(tecnicoDTO.email());
+        tecnico.setEspecializacao(tecnicoDTO.especializacao());
+
+        tecnicoRepository.save(tecnico);
+
     }
 
     public Optional<Tecnico> listarPorId(UUID id) {
