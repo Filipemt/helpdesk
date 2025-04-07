@@ -6,7 +6,7 @@ import br.com.filipecode.DeskhelpApi.model.enums.Status;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record ChamadoRespostaDTO(
+public record ChamadoAtualizadoRespostaDTO(
         UUID id,
         String titulo,
         String descricao,
@@ -14,7 +14,8 @@ public record ChamadoRespostaDTO(
         Status status,
         LocalDateTime dataCriacao,
         LocalDateTime dataAtualizacao,
-        UUID usuarioId
+        UUID usuarioId,
+        UUID tecnicoId
 ) {
 
 }

@@ -1,6 +1,7 @@
 package br.com.filipecode.DeskhelpApi.services;
 
 import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoDTO;
+import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.model.entities.Chamado;
 import br.com.filipecode.DeskhelpApi.model.entities.Usuario;
 import br.com.filipecode.DeskhelpApi.model.enums.Status;
@@ -10,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +38,27 @@ public class ChamadoService {
         chamado.setUsuario(usuario);
 
         chamadoRepository.save(chamado);
+    }
+
+    public Optional<Chamado> listarChamadoPorId(UUID id) {
+        return chamadoRepository.findById(id);
+    }
+
+    public Optional<ChamadoRespostaDTO> buscarDetalhesPorId(UUID id) {
+        return chamadoRepository.findById(id)
+                .map(chamado -> new ChamadoRespostaDTO(
+                        chamado.getId(),
+                        chamado.getTitulo(),
+                        chamado.getDescricao(),
+                        chamado.getPrioridade(),
+                        chamado.getStatus(),
+                        chamado.getDataCriacao(),
+                        chamado.getDataAtualizacao(),
+                        chamado.getUsuario().getId()
+                ));
+    }
+
+    public void deletarChamadoPorId(UUID id) {
+        chamadoRepository.deleteById(id);
     }
 }
