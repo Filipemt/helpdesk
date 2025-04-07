@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,16 @@ public class ChamadoController {
     public ResponseEntity<Void> criarChamado(@RequestBody ChamadoDTO chamadoDTO) {
         chamadoService.criarChamado(chamadoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ChamadoRespostaDTO>> filtrarChamados(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String prioridade
+    ) {
+        List<ChamadoRespostaDTO> chamados = chamadoService.filtrarChamados(titulo, status, prioridade);
+        return ResponseEntity.ok(chamados);
     }
 
     @GetMapping("{id}")
