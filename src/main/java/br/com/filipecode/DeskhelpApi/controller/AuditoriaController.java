@@ -1,9 +1,10 @@
 package br.com.filipecode.DeskhelpApi.controller;
 
-import br.com.filipecode.DeskhelpApi.model.entities.Auditoria;
-import br.com.filipecode.DeskhelpApi.repositories.AuditoriaRepository;
+import br.com.filipecode.DeskhelpApi.model.dtos.HistoricoChamadoDTO;
+import br.com.filipecode.DeskhelpApi.services.AuditoriaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,24 +19,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuditoriaController {
 
-    private final AuditoriaRepository auditoriaRepository;
+    private final AuditoriaService auditoriaService;
 
     @GetMapping
-    public List<Auditoria> listarAuditorias(
+    public ResponseEntity<List<HistoricoChamadoDTO>> listarHistoricoAgrupadoComFiltro(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) UUID tecnicoId,
             @RequestParam(required = false) UUID usuarioId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal
     ) {
-        List<Auditoria> auditorias = auditoriaRepository.findAll();
-
-        return auditorias.stream()
-                .filter(a -> status == null || a.getStatus().name().equalsIgnoreCase(status))
-                .filter(a -> tecnicoId == null || tecnicoId.equals(a.getTecnicoId()))
-                .filter(a -> usuarioId == null || usuarioId.equals(a.getUsuarioId()))
-                .filter(a -> dataInicial == null || !a.getDataEvento().isBefore(dataInicial))
-                .filter(a -> dataFinal == null || !a.getDataEvento().isAfter(dataFinal))
-                .toList();
+        List<HistoricoChamadoDTO> historico = auditoriaService.listarHistoricoAgrupadoComFiltro(
+                status, tecnicoId, usuarioId, dataInicial, dataFinal
+        );
+        return ResponseEntity.ok(historico);
     }
 }
