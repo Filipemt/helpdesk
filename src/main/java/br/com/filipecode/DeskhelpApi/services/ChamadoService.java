@@ -27,6 +27,7 @@ public class ChamadoService {
     private final ChamadoRepository chamadoRepository;
     private final UsuarioRepository usuarioRepository;
     private final TecnicoRepository tecnicoRepository;
+    private final AuditoriaService auditoriaService;
 
     public void criarChamado(ChamadoDTO chamadoDTO) {
         Usuario usuario = usuarioRepository.findById(chamadoDTO.usuarioId())
@@ -45,6 +46,11 @@ public class ChamadoService {
         chamado.setUsuario(usuario);
 
         chamadoRepository.save(chamado);
+
+        auditoriaService.registrarEvento(
+                chamado,
+                "Chamado criado com status ABERTO."
+        );
     }
 
     public Optional<Chamado> listarChamadoPorId(UUID id) {
@@ -107,8 +113,13 @@ public class ChamadoService {
         Chamado chamado = chamadoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Chamado não encontrado!"));
 
+        StringBuilder descricaoEvento = new StringBuilder("Chamado atualizado: ");
+
+
         if(atualizarChamadoDTO.status() != null) {
             chamado.setStatus(Status.valueOf(atualizarChamadoDTO.status()));
+            descricaoEvento.append("status alterado para ").append(atualizarChamadoDTO.status()).append(". ");
+
         }
         if (atualizarChamadoDTO.prioridade() != null) {
             chamado.setPrioridade(Prioridade.valueOf(atualizarChamadoDTO.prioridade()));
@@ -117,11 +128,15 @@ public class ChamadoService {
             Tecnico tecnico = tecnicoRepository.findById(atualizarChamadoDTO.tecnicoID())
                     .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
             chamado.setTecnico(tecnico);
+            descricaoEvento.append("técnico atribuído: ").append(tecnico.getNome()).append(". ");
+
         }
 
         chamado.setDataAtualizacao(LocalDateTime.now());
-
         chamadoRepository.save(chamado);
+
+        auditoriaService.registrarEvento(chamado, descricaoEvento.toString().trim());
+
     }
 
 
