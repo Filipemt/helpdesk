@@ -1,9 +1,9 @@
 package br.com.filipecode.DeskhelpApi.controller;
 
+import br.com.filipecode.DeskhelpApi.model.dtos.AtualizarChamadoDTO;
 import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoDTO;
 import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.model.entities.Chamado;
-import br.com.filipecode.DeskhelpApi.repositories.ChamadoRepository;
 import br.com.filipecode.DeskhelpApi.services.ChamadoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,6 +47,14 @@ public class ChamadoController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Void> atualizarChamado(@PathVariable UUID id,
+                                                 @RequestBody AtualizarChamadoDTO atualizarChamadoDTO) {
+
+        chamadoService.atualizarChamadoParcial(id, atualizarChamadoDTO);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("{id}")

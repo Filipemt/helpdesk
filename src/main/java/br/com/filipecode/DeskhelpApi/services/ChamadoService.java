@@ -1,12 +1,15 @@
 package br.com.filipecode.DeskhelpApi.services;
 
+import br.com.filipecode.DeskhelpApi.model.dtos.AtualizarChamadoDTO;
 import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoDTO;
 import br.com.filipecode.DeskhelpApi.model.dtos.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.model.entities.Chamado;
+import br.com.filipecode.DeskhelpApi.model.entities.Tecnico;
 import br.com.filipecode.DeskhelpApi.model.entities.Usuario;
 import br.com.filipecode.DeskhelpApi.model.enums.Prioridade;
 import br.com.filipecode.DeskhelpApi.model.enums.Status;
 import br.com.filipecode.DeskhelpApi.repositories.ChamadoRepository;
+import br.com.filipecode.DeskhelpApi.repositories.TecnicoRepository;
 import br.com.filipecode.DeskhelpApi.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ public class ChamadoService {
 
     private final ChamadoRepository chamadoRepository;
     private final UsuarioRepository usuarioRepository;
+    private final TecnicoRepository tecnicoRepository;
 
     public void criarChamado(ChamadoDTO chamadoDTO) {
         Usuario usuario = usuarioRepository.findById(chamadoDTO.usuarioId())
@@ -95,9 +99,30 @@ public class ChamadoService {
                 .collect(Collectors.toList());
     }
 
-
-
     public void deletarChamadoPorId(UUID id) {
         chamadoRepository.deleteById(id);
     }
+
+    public void atualizarChamadoParcial(UUID id, AtualizarChamadoDTO atualizarChamadoDTO) {
+        Chamado chamado = chamadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Chamado não encontrado!"));
+
+        if(atualizarChamadoDTO.status() != null) {
+            chamado.setStatus(Status.valueOf(atualizarChamadoDTO.status()));
+        }
+        if (atualizarChamadoDTO.prioridade() != null) {
+            chamado.setPrioridade(Prioridade.valueOf(atualizarChamadoDTO.prioridade()));
+        }
+        if (atualizarChamadoDTO.tecnicoID() != null) {
+            Tecnico tecnico = tecnicoRepository.findById(atualizarChamadoDTO.tecnicoID())
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+            chamado.setTecnico(tecnico);
+        }
+
+        chamado.setDataAtualizacao(LocalDateTime.now());
+
+        chamadoRepository.save(chamado);
+    }
+
+
 }
