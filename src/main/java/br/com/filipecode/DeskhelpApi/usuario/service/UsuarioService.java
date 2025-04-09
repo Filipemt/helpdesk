@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
+import br.com.filipecode.DeskhelpApi.usuario.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioValidator usuarioValidator;
 
     public Usuario salvarUsuario(UsuarioDTO usuarioDTO) {
 
@@ -26,34 +28,36 @@ public class UsuarioService {
         usuario.setDepartamento(usuarioDTO.departamento());
         usuario.setCargo(usuarioDTO.cargo());
 
+        usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
         return usuarioRepository.save(usuario);
     }
 
     public Usuario atualizarUsuario(UUID id, UsuarioDTO usuarioDTO) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
 
-        if (usuarioExistente.isPresent()) {
             Usuario usuario = new Usuario();
             usuario.setNome(usuarioDTO.nome());
             usuario.setEmail(usuarioDTO.email());
             usuario.setDepartamento(usuarioDTO.departamento());
             usuario.setCargo(usuarioDTO.cargo());
 
+            usuarioValidator.validarUsuarioExiste(id);
             return usuarioRepository.save(usuario);
-        } else {
-            throw new RuntimeException("Usuário não encontrado! ");
-        }
+
     }
 
     public Optional<Usuario> listarPorId(UUID id) {
+        usuarioValidator.validarUsuarioExiste(id);
         return usuarioRepository.findById(id);
     }
 
     public void deletarPorId(UUID id) {
+        usuarioValidator.validarUsuarioExiste(id);
         usuarioRepository.deleteById(id);
     }
 
     public Optional<UsuarioRespostaDTO> buscarDetalhesPorId(UUID id) {
+        usuarioValidator.validarUsuarioExiste(id);
          return usuarioRepository.findById(id)
                  .map(usuario -> new UsuarioRespostaDTO(
                          usuario.getId(),

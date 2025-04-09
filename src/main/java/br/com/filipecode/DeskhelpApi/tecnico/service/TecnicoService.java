@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
 import br.com.filipecode.DeskhelpApi.tecnico.repository.TecnicoRepository;
+import br.com.filipecode.DeskhelpApi.tecnico.validator.TecnicoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class TecnicoService {
 
     private final TecnicoRepository tecnicoRepository;
+    private final TecnicoValidator tecnicoValidator;
 
     public Tecnico criarTecnico(TecnicoDTO tecnicoDTO) {
         Tecnico tecnico = new Tecnico();
@@ -24,6 +26,7 @@ public class TecnicoService {
         tecnico.setEmail(tecnicoDTO.email());
         tecnico.setEspecializacao(tecnicoDTO.especializacao());
 
+        tecnicoValidator.validarEmailDuplicado(tecnicoDTO.email());
         return tecnicoRepository.save(tecnico);
     }
 
