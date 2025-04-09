@@ -16,4 +16,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(Map.of("erro", exception.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException exception) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of("erro", exception.getMessage()));
+    }
 }

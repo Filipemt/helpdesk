@@ -38,14 +38,10 @@ public class UsuarioController {
     @GetMapping("{id}")
     public ResponseEntity<Optional<UsuarioRespostaDTO>> buscarUsuarioPorId(@PathVariable String id) {
         UUID usuarioId = UUID.fromString(id);
-        
         Optional<UsuarioRespostaDTO> usuarioRespostaDTO = usuarioService.buscarDetalhesPorId(usuarioId);
 
-        if (usuarioRespostaDTO.isPresent()) {
-            return ResponseEntity.ok(usuarioRespostaDTO);
-        }
+        return ResponseEntity.ok(usuarioRespostaDTO);
 
-        return ResponseEntity.notFound().build();
     }
 
     @GetMapping
@@ -59,13 +55,10 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarUsuario(@PathVariable String id) {
         UUID usuarioId = UUID.fromString(id);
-        Optional<Usuario> possivelUsuario = usuarioService.listarPorId(usuarioId);
 
-        if (possivelUsuario.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
+        usuarioService.listarPorId(usuarioId);
         usuarioService.deletarPorId(usuarioId);
+
         return ResponseEntity.noContent().build();
     }
 }
