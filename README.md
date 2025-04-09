@@ -1,195 +1,196 @@
-# 📘 Deskhelp API - Sistema de Helpdesk de Chamados de TI
+# DeskhelpApi
 
-## 📖 Visão Geral
+## Descrição do Projeto
+O **DeskhelpApi** é uma aplicação desenvolvida em **Java** utilizando o framework **Spring Boot** e as melhores práticas do ecossistema Jakarta EE. A aplicação tem como objetivo oferecer uma API RESTful para solucionar problemas relacionados ao gerenciamento de tickets de suporte técnico, incluindo o registro, rastreamento e resolução de problemas.
 
-O sistema de Helpdesk de Chamados de TI é uma API RESTful que permite:
-
-- **Usuários** registrarem problemas técnicos
-- **Técnicos** consultarem e resolverem esses chamados
-- **Auditoria** completa do histórico de alterações dos chamados
+O uso de ferramentas modernas, como Spring Data JPA, Spring MVC e Lombok, garante maior produtividade, um design robusto e facilidade de manutenção. Este projeto também implementa boas práticas de manipulação de exceções globais, fornecendo respostas claras e informativas para os clientes da API.
 
 ---
 
-## 🧱 Arquitetura
+## Tecnologias Utilizadas
 
-- `Controller`: Camada responsável por lidar com requisições HTTP
-- `Service`: Contém a lógica de negócio
-- `Repository`: Comunicação com o banco de dados
-- `Model`: Contém as entidades, enums e DTOs
-- `Exceptions`: Lida com erros e validações personalizadas
-- `Validator`: Regras de negócio específicas
+- **Java SDK**: 21
+- **Spring Boot**:
+    - Spring Data JPA
+    - Spring MVC
+    - Spring Web
+- **Jakarta EE**: Para padrões modernos de desenvolvimento Java.
+- **Lombok**: Facilitação do desenvolvimento através da geração automática de código repetitivo.
+- **Banco de Dados**: Integração com um banco relacional via JPA (configurável).
 
 ---
 
-## 📂 Estrutura das Entidades
+## Funcionalidades
 
-### 👤 Usuário
+- **Gestão de Exceções**:
+    - Tratamento global de erros com mensagens padronizadas para duplicação de registros e entidades não encontradas.
+    - Código HTTP apropriado para cada erro (ex.: `409 Conflict`, `404 Not Found`).
 
-```json
+- **API RESTful**:
+    - Estruturada e seguindo princípios REST para operações CRUD (`Create`, `Read`, `Update`, `Delete`).
+
+- **Manutenibilidade**:
+    - Código modular e extensível, com separação de responsabilidades e padrões de desenvolvimento.
+
+---
+
+## Estrutura do Projeto
+
+A estrutura segue as diretrizes do Spring Boot, organizada da seguinte forma:
+
+````
+src/main/java 
+    └── br/com/filipecode/DeskhelpApi 
+        └── auditoria
+            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
+            ├── controllers/ # Controladores da API (camada de entrada). 
+            ├── services/ # Lógica de negócios (camada de serviço). 
+            ├── repositories/ # Interfaces para acesso ao banco de dados. 
+        └── chamado
+            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
+            ├── controllers/ # Controladores da API (camada de entrada). 
+            ├── services/ # Lógica de negócios (camada de serviço). 
+            ├── dto
+            ├── repositories/ # Interfaces para acesso ao banco de dados.
+        └── tecnico
+            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
+            ├── controllers/ # Controladores da API (camada de entrada). 
+            ├── services/ # Lógica de negócios (camada de serviço). 
+            ├── dto
+            ├── repositories/ # Interfaces para acesso ao banco de dados.
+        └── usuario
+            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
+            ├── controllers/ # Controladores da API (camada de entrada). 
+            ├── services/ # Lógica de negócios (camada de serviço). 
+            ├── dto
+            ├── repositories/ # Interfaces para acesso ao banco de dados.
+        └── shared/ ├── exceptions/ # Classe de tratamento global de exceções. 
+        └── DeskhelpApiApplication.java # Entry-point da aplicação.
+
+````
+
+---
+
+## Boas Práticas Utilizadas
+
+1. **Tratamento Global de Exceções**:
+    - Implementado na classe `GlobalExceptionHandler` usando anotações do Spring (`@ControllerAdvice` e `@ExceptionHandler`).
+    - Padrões de resposta uniformes em casos de erro.
+
+2. **Design Ocidental**:
+    - Total aderência ao padrão arquitetural REST.
+    - Endpoints intuitivos e facilmente documentáveis.
+
+3. **Configuração e Extensibilidade**:
+    - Uso de interface no repositório para desacoplar o código entre o banco e as regras de negócio.
+
+---
+
+## Como Executar o Projeto
+
+1. **Pré-requisitos**:
+    - Java 21 ou superior instalado.
+    - Maven para construção do projeto.
+    - Banco de dados configurado (ex.: PostgreSQL, H2 ou outro que preferir).
+
+2. **Clonar o Repositório**:
+   ```bash
+   git clone <URL_DO_REPOSITORIO>
+   cd DeskhelpApi
+   ```
+
+3. **Configurar o Aplicativo**:
+    - No arquivo `application.properties` ou `application.yml` (em `src/main/resources`):
+        - Configure o banco de dados:
+          ```properties
+          spring.datasource.url=jdbc:seubanco://host:porta/banco
+          spring.datasource.username=usuario
+          spring.datasource.password=senha
+          ```
+
+4. **Construção e Execução**:
+    - Para compilar e iniciar a aplicação:
+      ```bash
+      ./mvnw spring-boot:run
+      ```
+    - A aplicação estará disponível em: `http://localhost:8080`.
+
+---
+
+## Exemplo de Uso da API
+
+**Request exemplo**:
+```http
+POST /usuarios
+Content-Type: application/json
+
 {
-  "id": "UUID",
-  "nome": "String",
-  "email": "String",
-  "departamento": "String",
-  "cargo": "String"
+    "nome": "usuario",
+    "email": "usuario@gmail.com",
+    "departamento": "departamento",
+    "cargo": "cargo"
 }
 ```
 
-### 🔧 Técnico
+**Response em caso de duplicação de registro**:
+```http
+HTTP/1.1 409 Conflict
+Content-Type: application/json
 
-```json
 {
-  "id": "UUID",
-  "nome": "String",
-  "email": "String",
-  "especializacao": "String"
-}
-```
-
-### 📌 Chamado
-
-```json
-{
-  "id": "UUID",
-  "titulo": "String",
-  "descricao": "String",
-  "status": "Enum: ABERTO | EM_ANDAMENTO | CONCLUIDO",
-  "prioridade": "Enum: BAIXA | MEDIA | ALTA",
-  "dataCriacao": "DateTime",
-  "dataAtualizacao": "DateTime",
-  "dataFechamento": "DateTime (opcional)",
-  "usuarioId": "UUID",
-  "tecnicoId": "UUID (opcional)"
-}
-```
-
-### 📊 Auditoria
-
-```json
-{
-  "id": "UUID",
-  "chamadoId": "UUID",
-  "tituloChamado": "String",
-  "descricaoEvento": "String",
-  "status": "Enum: ABERTO | EM_ANDAMENTO | CONCLUIDO",
-  "dataEvento": "DateTime",
-  "usuarioId": "UUID",
-  "nomeUsuario": "String",
-  "tecnicoId": "UUID (opcional)",
-  "nomeTecnico": "String (opcional)"
+  "erro": "O registro já existe no sistema."
 }
 ```
 
 ---
 
-## 🔗 Endpoints
+## Melhorias Futuras
 
-### 👤 Usuários
+1. **Autenticação e Autorização**:
+    - Implementação de protocolos como JWT para segurança.
 
-#### ✅ Criar usuário
-`POST /usuarios`
+2. **Documentação da API**:
+    - Integração com Swagger ou Springdoc OpenAPI para gerar documentação interativa da API.
 
-#### 🔍 Buscar todos
-`GET /usuarios`
+3. **Testes Automatizados**:
+    - Cobertura de testes com o uso de ferramentas como JUnit e Mockito.
 
-#### 🔍 Buscar por ID
-`GET /usuarios/{id}`
-
-#### 🗑️ Deletar usuário
-`DELETE /usuarios/{id}`
+4. **Logs Avançados**:
+    - Uso de ferramentas de observabilidade como ELK Stack ou Logback.
 
 ---
 
-### 🔧 Técnicos
+## Contribuindo
 
-#### ✅ Criar técnico
-`POST /tecnicos`
+Contribuições são sempre bem-vindas! Siga os passos abaixo:
 
-#### 🔍 Buscar todos / Filtrar por especialização
-`GET /tecnicos?especializacao={valor}`
-
-#### 🔍 Buscar por ID
-`GET /tecnicos/{id}`
-
-#### ✏️ Atualizar técnico
-`PUT /tecnicos/{id}`
-
-#### 🗑️ Deletar técnico
-`DELETE /tecnicos/{id}`
-
----
-
-### 📌 Chamados
-
-#### ✅ Criar chamado
-`POST /chamados`
-
-#### 🔍 Buscar todos
-`GET /chamados`
-
-#### 🔍 Buscar por ID
-`GET /chamados/{id}`
-
-#### ✏️ Atualizar parcialmente (PATCH)
-`PATCH /chamados/{id}`
-
-#### 🔁 Atualizar totalmente (PUT)
-`PUT /chamados/{id}`
-
-#### 🗑️ Deletar chamado
-`DELETE /chamados/{id}`
+1. Faça um fork do projeto.
+2. Crie uma branch para a funcionalidade ou correção:
+   ```bash
+   git checkout -b minha-nova-feature
+   ```
+3. Commit suas mudanças:
+   ```bash
+   git commit -m "Descrição da minha nova funcionalidade"
+   ```
+4. Faça um push:
+   ```bash
+   git push origin minha-nova-feature
+   ```
+5. Abra um Pull Request.
 
 ---
 
-### 📊 Auditoria
+## Licença
 
-#### 🔍 Buscar histórico completo
-`GET /auditoria`
-
-**Descrição:** Lista todos os eventos de alteração relacionados aos chamados, com detalhes de quem fez, o que foi alterado, e quando.
-
-**Exemplo de resposta:**
-
-```json
-[
-  {
-    "id": "a1b2c3d4-e5f6-7890-abcd-1234567890ab",
-    "chamadoId": "9f2b8c3e-3f27-4217-9cf1-9bde6a07e8a2",
-    "tituloChamado": "Computador não liga mais",
-    "descricaoEvento": "Status alterado de ABERTO para EM_ANDAMENTO",
-    "status": "EM_ANDAMENTO",
-    "dataEvento": "2025-04-03T15:42:00",
-    "usuarioId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "nomeUsuario": "João Silva",
-    "tecnicoId": "c1a22e2d-8e34-4c87-b80c-290a5d74c3f7",
-    "nomeTecnico": "Carlos Lima"
-  }
-]
-```
+Este projeto é licenciado sob [MIT License](LICENSE).
 
 ---
 
-## 📦 Retornos Padrão
+## Contatos
 
-- `GET`: Retorna JSON com os dados solicitados
-- `POST`, `PUT`, `PATCH`, `DELETE`: Retornam apenas status HTTP apropriado (`201`, `204`, `400`, `404`, etc.)
+Caso tenha dúvidas ou sugestões, entre em contato:
 
----
-
-## 🧪 Testes com Postman
-
-Você pode utilizar o Postman para testar todos os endpoints da API. Requisições de criação e atualização aceitam `JSON`, enquanto as de consulta retornam informações detalhadas em `JSON` padronizado.
-
----
-
-## 📌 Observações Finais
-
-- As entidades são identificadas por UUID
-- Auditoria é registrada automaticamente ao criar, atualizar ou alterar status de um chamado
-- Todas as validações de negócio são feitas via classe `Validator` com exceções personalizadas
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido por Filipe (Deskhelp API) — Projeto pessoal com fins de aprendizado e boas práticas em APIs REST com Spring Boot.
+- **Autor**: Filipe Mota Barbosa
+- **E-mail**: [filipeddev@gmail.com](mailto:filipeddev@gmail.com)
+- **LinkedIn**: [linkedin.com/in/Filipe Mota](https://www.linkedin.com/in/filipe-mota-b15139231/)
