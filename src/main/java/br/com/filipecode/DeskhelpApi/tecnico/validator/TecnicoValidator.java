@@ -1,9 +1,12 @@
 package br.com.filipecode.DeskhelpApi.tecnico.validator;
 
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
 import br.com.filipecode.DeskhelpApi.tecnico.repository.TecnicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -15,5 +18,10 @@ public class TecnicoValidator {
         if (tecnicoRepository.existsByEmail(email)) {
             throw new RegistroDuplicadoException("Já existe um tecnico cadastrado com o email informado!");
         }
+    }
+
+    public void validarTecnicoExiste(UUID id) {
+        tecnicoRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Técnico não encontrado!"));
     }
 }
