@@ -3,7 +3,6 @@ package br.com.filipecode.DeskhelpApi.usuario.validator;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
 
-import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,8 +21,8 @@ public class UsuarioValidator {
         }
     }
 
-    public Usuario validarUsuarioExiste(UUID id) {
-        return usuarioRepository.findById(id)
+    public void validarUsuarioExiste(UUID id) {
+         usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado!"));
     }
 }
