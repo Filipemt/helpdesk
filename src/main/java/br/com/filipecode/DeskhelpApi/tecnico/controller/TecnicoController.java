@@ -47,12 +47,7 @@ public class TecnicoController {
     public ResponseEntity<Optional<TecnicoRespostaDTO>> buscarTecnicoPorId(@PathVariable String id) {
        UUID tecnicoId = UUID.fromString(id);
 
-        Optional<TecnicoRespostaDTO> tecnicoRespostaDTO = tecnicoService.buscarDetalhesPorId(tecnicoId);
-
-       if (tecnicoRespostaDTO.isPresent()) {
-           return ResponseEntity.ok(tecnicoRespostaDTO);
-       }
-
+       tecnicoService.buscarDetalhesPorId(tecnicoId);
        return ResponseEntity.notFound().build();
     }
 
@@ -66,13 +61,8 @@ public class TecnicoController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletarTecnico(@PathVariable String id) {
         UUID tecnicoId = UUID.fromString(id);
-        Optional<Tecnico> possivelTecnico = tecnicoService.listarPorId(tecnicoId);
-
-        if (possivelTecnico.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
         tecnicoService.deletarPorId(tecnicoId);
+
         return ResponseEntity.noContent().build();
     }
 }

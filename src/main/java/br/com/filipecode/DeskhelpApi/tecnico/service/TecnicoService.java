@@ -1,5 +1,6 @@
 package br.com.filipecode.DeskhelpApi.tecnico.service;
 
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
@@ -32,7 +33,11 @@ public class TecnicoService {
 
     public void atualizarTecnico(UUID id, TecnicoDTO tecnicoDTO) {
         Tecnico tecnico = tecnicoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tecnico não encontrado!"));
+                        .orElseThrow(() -> new EntidadeNaoEncontradaException("Técnico não encontrado!"));
+
+        if (!tecnico.getEmail().equals(tecnicoDTO.email())) {
+            tecnicoValidator.validarEmailDuplicado(tecnicoDTO.email());
+        }
 
         tecnico.setNome(tecnicoDTO.nome());
         tecnico.setEmail(tecnicoDTO.email());
@@ -42,11 +47,8 @@ public class TecnicoService {
 
     }
 
-    public Optional<Tecnico> listarPorId(UUID id) {
-        return tecnicoRepository.findById(id);
-    }
-
     public Optional<TecnicoRespostaDTO> buscarDetalhesPorId(UUID id) {
+        tecnicoValidator.validarTecnicoExiste(id);
         return tecnicoRepository.findById(id)
                 .map(tecnico -> new TecnicoRespostaDTO(
                         tecnico.getId(),
@@ -77,6 +79,7 @@ public class TecnicoService {
     }
 
     public void deletarPorId(UUID id) {
+        tecnicoValidator.validarTecnicoExiste(id);
         tecnicoRepository.deleteById(id);
     }
 }
