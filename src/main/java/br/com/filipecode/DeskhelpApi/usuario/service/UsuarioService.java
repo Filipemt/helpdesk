@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
+import br.com.filipecode.DeskhelpApi.usuario.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioValidator usuarioValidator;
 
     public Usuario salvarUsuario(UsuarioDTO usuarioDTO) {
 
@@ -26,6 +28,7 @@ public class UsuarioService {
         usuario.setDepartamento(usuarioDTO.departamento());
         usuario.setCargo(usuarioDTO.cargo());
 
+        usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
         return usuarioRepository.save(usuario);
     }
 
