@@ -9,4 +9,6 @@ import java.util.UUID;
 
 public interface TecnicoRepository extends JpaRepository<Tecnico, UUID> {
     List<Tecnico> findByEspecializacao(String especializacao);
+
+    boolean existsByEmail(String email);
 }
