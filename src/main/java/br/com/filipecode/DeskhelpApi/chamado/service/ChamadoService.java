@@ -5,8 +5,10 @@ import br.com.filipecode.DeskhelpApi.chamado.dto.ChamadoDTO;
 import br.com.filipecode.DeskhelpApi.chamado.dto.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.chamado.entity.Chamado;
 import br.com.filipecode.DeskhelpApi.auditoria.service.AuditoriaService;
+import br.com.filipecode.DeskhelpApi.chamado.validator.ChamadoValidador;
 import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
 import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
@@ -29,6 +31,7 @@ public class ChamadoService {
     private final UsuarioRepository usuarioRepository;
     private final TecnicoRepository tecnicoRepository;
     private final AuditoriaService auditoriaService;
+    private final ChamadoValidador chamadoValidador;
 
     public void criarChamado(ChamadoDTO chamadoDTO) {
         Usuario usuario = usuarioRepository.findById(chamadoDTO.usuarioId())
@@ -111,9 +114,7 @@ public class ChamadoService {
     }
 
     public void atualizarChamadoParcial(UUID id, AtualizarChamadoDTO atualizarChamadoDTO) {
-        Chamado chamado = chamadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado!"));
-
+        Chamado chamado = chamadoValidador.validarChamadoPodeSerAlterado(id);
         StringBuilder descricaoEvento = new StringBuilder("Chamado atualizado: ");
 
 
@@ -132,13 +133,9 @@ public class ChamadoService {
             descricaoEvento.append("técnico atribuído: ").append(tecnico.getNome()).append(". ");
 
         }
-
         chamado.setDataAtualizacao(LocalDateTime.now());
+
         chamadoRepository.save(chamado);
-
         auditoriaService.registrarEvento(chamado, descricaoEvento.toString().trim());
-
     }
-
-
 }

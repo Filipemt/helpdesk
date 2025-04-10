@@ -23,4 +23,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of("erro", exception.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleRequisicaoInvalida(RequisicaoInvalidadeException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("erro", exception.getMessage()));
+    }
 }
