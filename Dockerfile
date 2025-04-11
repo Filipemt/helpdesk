@@ -1,16 +1,23 @@
-FROM ubuntu:latest AS build
+# Etapa de build: usa imagem oficial com Maven + Java 21
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 
-RUN apt-get update
-RUN apt-get install openjdk-21-jdk -y
-COPY src .
+# Define o diretório de trabalho dentro da imagem
+WORKDIR /app
 
-RUN apt-get install maven -y
-RUN mvn clean install
+# Copia o pom.xml e o src para o diretório de trabalho
+COPY pom.xml .
+COPY src ./src
 
-FROM openjdk:21-jdk-slim
+# Compila o projeto e gera o .jar (sem rodar testes)
+RUN mvn clean package -DskipTests
+
+# Etapa final: imagem leve com só o .jar
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-COPY --from=build /target/DeskhelpApi-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+ENTRYPOINT ["java", "-jar", "app.jar"]
