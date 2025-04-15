@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.service.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody  @Valid UsuarioDTO usuarioDTO) {
         Usuario usuario = usuarioService.salvarUsuario(usuarioDTO);
 
         URI uri = ServletUriComponentsBuilder
