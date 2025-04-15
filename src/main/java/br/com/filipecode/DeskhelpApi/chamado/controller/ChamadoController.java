@@ -5,6 +5,7 @@ import br.com.filipecode.DeskhelpApi.chamado.dto.ChamadoDTO;
 import br.com.filipecode.DeskhelpApi.chamado.dto.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.chamado.entity.Chamado;
 import br.com.filipecode.DeskhelpApi.chamado.service.ChamadoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
