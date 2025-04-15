@@ -23,7 +23,7 @@ public class ChamadoController {
     private final ChamadoService chamadoService;
 
     @PostMapping
-    public ResponseEntity<Void> criarChamado(@RequestBody ChamadoDTO chamadoDTO) {
+    public ResponseEntity<Void> criarChamado(@RequestBody @Valid ChamadoDTO chamadoDTO) {
         chamadoService.criarChamado(chamadoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
