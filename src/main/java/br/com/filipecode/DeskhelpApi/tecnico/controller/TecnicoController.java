@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
 import br.com.filipecode.DeskhelpApi.tecnico.service.TecnicoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class TecnicoController {
     private final TecnicoService tecnicoService;
 
     @PostMapping
-    public ResponseEntity<Object> criarTecnico(@RequestBody TecnicoDTO tecnicoDTO) {
+    public ResponseEntity<Object> criarTecnico(@RequestBody @Valid TecnicoDTO tecnicoDTO) {
         Tecnico tecnico = tecnicoService.criarTecnico(tecnicoDTO);
 
         URI uri = ServletUriComponentsBuilder
@@ -36,7 +37,7 @@ public class TecnicoController {
 
     @PutMapping("{id}")
     public ResponseEntity<Object> atualizarTecnico(@PathVariable String id,
-                                                       @RequestBody TecnicoDTO tecnicoDTO) {
+                                                   @RequestBody @Valid TecnicoDTO tecnicoDTO) {
         UUID tecnicoId = UUID.fromString(id);
         tecnicoService.atualizarTecnico(tecnicoId, tecnicoDTO);
 

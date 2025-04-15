@@ -1,10 +1,13 @@
 package br.com.filipecode.DeskhelpApi.shared.exceptions;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
@@ -29,5 +32,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("erro", exception.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> erros = new HashMap<>();
+
+        exception.getBindingResult().getFieldErrors().forEach(error -> {
+            String campo = error.getField();
+            String mensagem = error.getDefaultMessage();
+            erros.put(campo, mensagem);
+        });
+
+        return ResponseEntity.badRequest().body(erros);
     }
 }
