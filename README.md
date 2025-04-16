@@ -148,14 +148,11 @@ Content-Type: application/json
 
 1. **Autenticação e Autorização**:
     - Implementação de protocolos como JWT para segurança.
-
-2. **Documentação da API**:
-    - Integração com Swagger ou Springdoc OpenAPI para gerar documentação interativa da API.
-
-3. **Testes Automatizados**:
+    - 
+2. **Testes Automatizados**:
     - Cobertura de testes com o uso de ferramentas como JUnit e Mockito.
 
-4. **Logs Avançados**:
+3. **Logs Avançados**:
     - Uso de ferramentas de observabilidade como ELK Stack ou Logback.
 
 ---
