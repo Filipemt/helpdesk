@@ -8,6 +8,7 @@ import br.com.filipecode.DeskhelpApi.auditoria.service.AuditoriaService;
 import br.com.filipecode.DeskhelpApi.chamado.validator.ChamadoValidador;
 import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
 import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
@@ -34,7 +35,7 @@ public class ChamadoService {
 
     public void criarChamado(ChamadoDTO chamadoDTO) {
         Usuario usuario = usuarioRepository.findById(chamadoDTO.usuarioId())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado!"));
 
         Chamado chamado = new Chamado();
         chamado.setTitulo(chamadoDTO.titulo());
