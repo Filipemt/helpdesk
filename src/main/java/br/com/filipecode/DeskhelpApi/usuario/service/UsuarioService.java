@@ -1,8 +1,11 @@
 package br.com.filipecode.DeskhelpApi.usuario.service;
 
-import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioDTO;
-import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioRespostaDTO;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
+import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
 import br.com.filipecode.DeskhelpApi.usuario.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.nome());
         usuario.setEmail(usuarioDTO.email());
+        usuario.setRole(Role.USUARIO);
         usuario.setDepartamento(usuarioDTO.departamento());
         usuario.setCargo(usuarioDTO.cargo());
 
@@ -32,18 +36,17 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario atualizarUsuario(UUID id, UsuarioDTO usuarioDTO) {
-        Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
+    public Usuario atualizarUsuario(UUID id, AtualizarUsuarioDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
-            Usuario usuario = new Usuario();
-            usuario.setNome(usuarioDTO.nome());
-            usuario.setEmail(usuarioDTO.email());
-            usuario.setDepartamento(usuarioDTO.departamento());
-            usuario.setCargo(usuarioDTO.cargo());
+            usuario.setNome(dto.nome());
+            usuario.setEmail(dto.email());
+            usuario.setRole(dto.role());
+            usuario.setDepartamento(dto.departamento());
+            usuario.setCargo(dto.cargo());
 
-            usuarioValidator.validarUsuarioExiste(id);
             return usuarioRepository.save(usuario);
-
     }
 
     public Optional<Usuario> listarPorId(UUID id) {
@@ -63,6 +66,7 @@ public class UsuarioService {
                          usuario.getId(),
                          usuario.getNome(),
                          usuario.getEmail(),
+                         usuario.getRole(),
                          usuario.getDepartamento(),
                          usuario.getCargo()
                  ));
@@ -85,6 +89,7 @@ public class UsuarioService {
                         usuario.getId(),
                         usuario.getNome(),
                         usuario.getEmail(),
+                        usuario.getRole(),
                         usuario.getDepartamento(),
                         usuario.getCargo()
                 ))

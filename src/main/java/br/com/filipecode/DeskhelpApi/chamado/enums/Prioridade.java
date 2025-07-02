@@ -1,4 +1,4 @@
-package br.com.filipecode.DeskhelpApi.shared.enums;
+package br.com.filipecode.DeskhelpApi.chamado.enums;
 
 public enum Prioridade {
     BAIXA,

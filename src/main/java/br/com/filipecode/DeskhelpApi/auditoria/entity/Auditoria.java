@@ -1,6 +1,6 @@
 package br.com.filipecode.DeskhelpApi.auditoria.entity;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -3,7 +3,7 @@ package br.com.filipecode.DeskhelpApi.chamado.validator;
 import br.com.filipecode.DeskhelpApi.chamado.entity.Chamado;
 import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeException;
 import lombok.RequiredArgsConstructor;

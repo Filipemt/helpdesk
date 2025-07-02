@@ -1,7 +1,7 @@
 package br.com.filipecode.DeskhelpApi.chamado.dto;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Prioridade;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;

@@ -1,7 +1,8 @@
 package br.com.filipecode.DeskhelpApi.usuario.controller;
 
-import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioDTO;
-import br.com.filipecode.DeskhelpApi.usuario.dto.UsuarioRespostaDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "409", description = "Registro duplicado!")
     })
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody  @Valid UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         Usuario usuario = usuarioService.salvarUsuario(usuarioDTO);
 
         URI uri = ServletUriComponentsBuilder
@@ -44,6 +45,15 @@ public class UsuarioController {
                 .toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> atualizarUsuario(@PathVariable String id,
+                                                   @RequestBody @Valid AtualizarUsuarioDTO dto) {
+        UUID usuarioId = UUID.fromString(id);
+        usuarioService.atualizarUsuario(usuarioId, dto);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(

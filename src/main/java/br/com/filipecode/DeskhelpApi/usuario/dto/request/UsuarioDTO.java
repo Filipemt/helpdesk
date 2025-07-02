@@ -1,4 +1,4 @@
-package br.com.filipecode.DeskhelpApi.usuario.dto;
+package br.com.filipecode.DeskhelpApi.usuario.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
