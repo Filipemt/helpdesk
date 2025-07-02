@@ -1,193 +1,122 @@
-# DeskhelpApi
+# 🛠️ Deskhelp API
 
-## Descrição do Projeto
-O **DeskhelpApi** é uma aplicação desenvolvida em **Java** utilizando o framework **Spring Boot** e as melhores práticas do ecossistema Jakarta EE. A aplicação tem como objetivo oferecer uma API RESTful para solucionar problemas relacionados ao gerenciamento de tickets de suporte técnico, incluindo o registro, rastreamento e resolução de problemas.
-
-O uso de ferramentas modernas, como Spring Data JPA, Spring MVC e Lombok, garante maior produtividade, um design robusto e facilidade de manutenção. Este projeto também implementa boas práticas de manipulação de exceções globais, fornecendo respostas claras e informativas para os clientes da API.
+**Deskhelp** é uma API RESTful desenvolvida em Java com Spring Boot, com o objetivo de simular um sistema de helpdesk para abertura, acompanhamento e resolução de chamados de suporte técnico.  
+O projeto tem fins educacionais e demonstra boas práticas de arquitetura, segurança, versionamento e organização de código.
 
 ---
 
-## Tecnologias Utilizadas
+## 🚀 Tecnologias e Ferramentas
 
-- **Java SDK**: 21
-- **Spring Boot**:
-    - Spring Data JPA
-    - Spring MVC
-    - Spring Web
-- **Jakarta EE**: Para padrões modernos de desenvolvimento Java.
-- **Lombok**: Facilitação do desenvolvimento através da geração automática de código repetitivo.
-- **Banco de Dados**: Integração com um banco relacional via JPA (configurável).
-
----
-
-## Funcionalidades
-
-- **Gestão de Exceções**:
-    - Tratamento global de erros com mensagens padronizadas para duplicação de registros e entidades não encontradas.
-    - Código HTTP apropriado para cada erro (ex.: `409 Conflict`, `404 Not Found`).
-
-- **API RESTful**:
-    - Estruturada e seguindo princípios REST para operações CRUD (`Create`, `Read`, `Update`, `Delete`).
-
-- **Manutenibilidade**:
-    - Código modular e extensível, com separação de responsabilidades e padrões de desenvolvimento.
+- Java 17
+- Spring Boot
+- Spring Data JPA
+- PostgreSQL
+- Spring Security (em andamento)
+- Swagger / OpenAPI
+- Git + GitHub Projects
+- Maven
 
 ---
 
-## Estrutura do Projeto
+## 📁 Estrutura Modular do Projeto
 
-A estrutura segue as diretrizes do Spring Boot, organizada da seguinte forma:
+Organizado por **módulos funcionais**, cada um com suas camadas internas:
 
-````
-src/main/java 
-    └── br/com/filipecode/DeskhelpApi 
-        └── auditoria
-            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
-            ├── controllers/ # Controladores da API (camada de entrada). 
-            ├── services/ # Lógica de negócios (camada de serviço). 
-            ├── repositories/ # Interfaces para acesso ao banco de dados. 
-        └── chamado
-            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
-            ├── controllers/ # Controladores da API (camada de entrada). 
-            ├── services/ # Lógica de negócios (camada de serviço). 
-            ├── dto
-            ├── repositories/ # Interfaces para acesso ao banco de dados.
-        └── tecnico
-            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
-            ├── controllers/ # Controladores da API (camada de entrada). 
-            ├── services/ # Lógica de negócios (camada de serviço). 
-            ├── dto
-            ├── repositories/ # Interfaces para acesso ao banco de dados.
-        └── usuario
-            ├── entity/ # Entidades JPA que representam as tabelas do banco de dados.
-            ├── controllers/ # Controladores da API (camada de entrada). 
-            ├── services/ # Lógica de negócios (camada de serviço). 
-            ├── dto
-            ├── repositories/ # Interfaces para acesso ao banco de dados.
-        └── shared/ ├── exceptions/ # Classe de tratamento global de exceções. 
-        └── DeskhelpApiApplication.java # Entry-point da aplicação.
-
-````
-
----
-
-## Boas Práticas Utilizadas
-
-1. **Tratamento Global de Exceções**:
-    - Implementado na classe `GlobalExceptionHandler` usando anotações do Spring (`@ControllerAdvice` e `@ExceptionHandler`).
-    - Padrões de resposta uniformes em casos de erro.
-
-2. **Design Ocidental**:
-    - Total aderência ao padrão arquitetural REST.
-    - Endpoints intuitivos e facilmente documentáveis.
-
-3. **Configuração e Extensibilidade**:
-    - Uso de interface no repositório para desacoplar o código entre o banco e as regras de negócio.
-
----
-
-## Como Executar o Projeto
-
-1. **Pré-requisitos**:
-    - Java 21 ou superior instalado.
-    - Maven para construção do projeto.
-    - Banco de dados configurado (ex.: PostgreSQL, H2 ou outro que preferir).
-
-2. **Clonar o Repositório**:
-   ```bash
-   git clone <URL_DO_REPOSITORIO>
-   cd DeskhelpApi
-   ```
-
-3. **Configurar o Aplicativo**:
-    - No arquivo `application.properties` ou `application.yml` (em `src/main/resources`):
-        - Configure o banco de dados:
-          ```properties
-          spring.datasource.url=jdbc:seubanco://host:porta/banco
-          spring.datasource.username=usuario
-          spring.datasource.password=senha
-          ```
-
-4. **Construção e Execução**:
-    - Para compilar e iniciar a aplicação:
-      ```bash
-      ./mvnw spring-boot:run
-      ```
-    - A aplicação estará disponível em: `http://localhost:8080`.
-
----
-
-## Exemplo de Uso da API
-
-**Request exemplo**:
-```http
-POST /usuarios
-Content-Type: application/json
-
-{
-    "nome": "usuario",
-    "email": "usuario@gmail.com",
-    "departamento": "departamento",
-    "cargo": "cargo"
-}
+```text
+src/main/java/br/com/filipecode/DeskhelpApi/
+│
+├── chamado/       # Módulo de chamados (entidade, controller, service, etc)
+├── usuario/       # Usuários e técnicos unificados com controle de papéis (Role)
+├── auditoria/     # Histórico de ações nos chamados
+├── shared/        # Exceções, utilitários e padrões globais
+└── DeskhelpApiApplication.java  # Entry point da aplicação
 ```
 
-**Response em caso de duplicação de registro**:
-```http
-HTTP/1.1 409 Conflict
-Content-Type: application/json
+## 🔐 Segurança
 
-{
-  "erro": "O registro já existe no sistema."
-}
+### 🔄 Status atual
+- 🔄 Refatoração para unificação de `Usuario` e `Tecnico`
+- 🔄Criptografia de senha com `BCryptPasswordEncoder`
+- 🔄 Em desenvolvimento: autenticação via Spring Security com JWT
+
+### 🔜 Planejado
+- Autenticação JWT com token Bearer
+- Controle de acesso baseado em `Role` (`USUARIO`, `TECNICO`, `ADMIN`)
+- Proteção de rotas sensíveis
+- Autorização com `@PreAuthorize`
+
+---
+
+## 📌 Sprints de Evolução
+
+Este projeto é organizado em sprints, seguindo um roadmap técnico de implementação.  
+As tarefas são gerenciadas no **GitHub Projects (Kanban)** e divididas em:
+
+| Sprint | Objetivo principal                            | Status      |
+|--------|-----------------------------------------------|-------------|
+| Sprint 1 | Refatoração de Usuário e papel (Role)         | ✅ Em andamento |
+| Sprint 2 | Autenticação com Spring Security (sem JWT)    | 🔜 Planejada |
+| Sprint 3 | JWT Token e autenticação stateless            | 🔜 Planejada |
+| Sprint 4 | Autorização baseada em papel (role-based)     | 🔜 Planejada |
+| Sprint 5 | Melhorias avançadas de segurança              | 🔜 Opcional  |
+
+---
+
+## 🧑‍💻 Como rodar o projeto localmente
+
+```bash
+# Clonar o projeto
+git clone https://github.com/Filipemt/helpdesk.git
+
+# Entrar na pasta do projeto
+cd helpdesk
+
+# Rodar com sua IDE ou usar:
+./mvnw spring-boot:run
+
+Certifique-se de configurar corretamente o banco de dados PostgreSQL e as variáveis de ambiente.
+🧪 Testes de Requisição
+
+A aplicação pode ser testada via:
+	•	✅ Postman
+	•	✅ Swagger (acessível em /swagger-ui.html após iniciar a aplicação)
+
+Exemplos de endpoints:
+GET    /usuarios
+POST   /usuarios
+POST   /login
+GET    /chamados
+POST   /chamados
+...
 ```
+## 🧾 Padrões de Contribuição
 
----
+O projeto segue padrões de organização profissional:
 
-## Melhorias Futuras
+	•	Nomenclatura de branches: feature/security-refactor-user-role
+	•	Commits semânticos: feat:, refactor:, fix:
+	•	Issues com labels e checklist
+	•	Sprint organizada por GitHub Projects
 
-1. **Autenticação e Autorização**:
-    - Implementação de protocolos como JWT para segurança.
-    - 
-2. **Testes Automatizados**:
-    - Cobertura de testes com o uso de ferramentas como JUnit e Mockito.
+Veja mais detalhes no arquivo CONTRIBUTING.md
 
-3. **Logs Avançados**:
-    - Uso de ferramentas de observabilidade como ELK Stack ou Logback.
+⸻
 
----
+📚 Aprendizados e Propósito
 
-## Contribuindo
+Esse projeto foi construído com o objetivo de aprender de forma prática como aplicar:
 
-Contribuições são sempre bem-vindas! Siga os passos abaixo:
+	•	Arquitetura modular por domínio (por feature)
+	•	Camadas bem definidas (controller, service, repository, DTOs)
+	•	Validações e tratamento de exceções personalizados
+	•	Implementação progressiva de segurança com Spring Security
+	•	Uso de Kanban, issues e boas práticas de versionamento
+👨‍💻 Autor
 
-1. Faça um fork do projeto.
-2. Crie uma branch para a funcionalidade ou correção:
-   ```bash
-   git checkout -b minha-nova-feature
-   ```
-3. Commit suas mudanças:
-   ```bash
-   git commit -m "Descrição da minha nova funcionalidade"
-   ```
-4. Faça um push:
-   ```bash
-   git push origin minha-nova-feature
-   ```
-5. Abra um Pull Request.
+Filipe – Desenvolvedor Java em formação e entusiasta de arquitetura limpa.
 
----
+LinkedIn: https://www.linkedin.com/in/filipe-mota-b15139231/
 
-## Licença
+📄 Licença
 
-Este projeto é licenciado sob [MIT License](LICENSE).
-
----
-
-## Contatos
-
-Caso tenha dúvidas ou sugestões, entre em contato:
-
-- **Autor**: Filipe Mota Barbosa
-- **E-mail**: [filipeddev@gmail.com](mailto:filipeddev@gmail.com)
-- **LinkedIn**: [linkedin.com/in/Filipe Mota](https://www.linkedin.com/in/filipe-mota-b15139231/)
+Este projeto está licenciado sob a MIT License.
