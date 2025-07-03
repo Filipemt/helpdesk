@@ -3,7 +3,6 @@ package br.com.filipecode.DeskhelpApi.usuario.controller;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
-import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import br.com.filipecode.DeskhelpApi.usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
