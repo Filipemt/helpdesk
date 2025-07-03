@@ -9,6 +9,7 @@ import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
 import br.com.filipecode.DeskhelpApi.usuario.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UsuarioValidator usuarioValidator;
 
     public UsuarioRespostaDTO salvarUsuario(UsuarioDTO usuarioDTO) {
@@ -28,6 +30,7 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.nome());
+        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
         usuario.setEmail(usuarioDTO.email());
         usuario.setRole(Role.USUARIO);
         usuario.setDepartamento(usuarioDTO.departamento());
@@ -43,6 +46,7 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.nome());
+        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
         usuario.setEmail(usuarioDTO.email());
         usuario.setRole(Role.TECNICO);
         usuario.setDepartamento(usuarioDTO.departamento());
@@ -58,6 +62,7 @@ public class UsuarioService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
             usuario.setNome(dto.nome());
+            usuario.setSenha(passwordEncoder.encode(dto.senha()));
             usuario.setEmail(dto.email());
             usuario.setRole(dto.role());
             usuario.setDepartamento(dto.departamento());
