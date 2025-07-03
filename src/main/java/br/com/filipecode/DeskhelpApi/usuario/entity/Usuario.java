@@ -1,6 +1,7 @@
 package br.com.filipecode.DeskhelpApi.usuario.entity;
 
 import br.com.filipecode.DeskhelpApi.chamado.entity.Chamado;
+import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,8 +23,15 @@ public class Usuario {
     @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false)
+    private String senha;
+
     @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(nullable = false)
     private String departamento;

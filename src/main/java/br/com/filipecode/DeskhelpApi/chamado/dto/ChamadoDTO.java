@@ -1,6 +1,6 @@
 package br.com.filipecode.DeskhelpApi.chamado.dto;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Prioridade;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

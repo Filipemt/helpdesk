@@ -1,8 +1,7 @@
 package br.com.filipecode.DeskhelpApi.chamado.entity;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
-import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Prioridade;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -47,8 +46,4 @@ public class Chamado {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "tecnico_id")
-    private Tecnico tecnico;
 }

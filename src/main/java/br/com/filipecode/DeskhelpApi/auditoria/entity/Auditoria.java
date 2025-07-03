@@ -1,6 +1,6 @@
 package br.com.filipecode.DeskhelpApi.auditoria.entity;
 
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +21,6 @@ public class Auditoria {
 
     private UUID chamadoId;
     private String tituloChamado;
-
-    private UUID tecnicoId;
-    private String nomeTecnico;
 
     private UUID usuarioId;
     private String nomeUsuario;

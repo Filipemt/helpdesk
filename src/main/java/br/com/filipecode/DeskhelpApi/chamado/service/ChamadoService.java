@@ -6,13 +6,11 @@ import br.com.filipecode.DeskhelpApi.chamado.dto.ChamadoRespostaDTO;
 import br.com.filipecode.DeskhelpApi.chamado.entity.Chamado;
 import br.com.filipecode.DeskhelpApi.auditoria.service.AuditoriaService;
 import br.com.filipecode.DeskhelpApi.chamado.validator.ChamadoValidador;
-import br.com.filipecode.DeskhelpApi.shared.enums.Prioridade;
-import br.com.filipecode.DeskhelpApi.shared.enums.Status;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Prioridade;
+import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
-import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
 import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
-import br.com.filipecode.DeskhelpApi.tecnico.repository.TecnicoRepository;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,6 @@ public class ChamadoService {
 
     private final ChamadoRepository chamadoRepository;
     private final UsuarioRepository usuarioRepository;
-    private final TecnicoRepository tecnicoRepository;
     private final AuditoriaService auditoriaService;
     private final ChamadoValidador chamadoValidador;
 
@@ -71,8 +68,7 @@ public class ChamadoService {
                         chamado.getStatus(),
                         chamado.getDataCriacao(),
                         chamado.getDataAtualizacao(),
-                        chamado.getUsuario().getId(),
-                        chamado.getTecnico() != null ? chamado.getTecnico().getId() : null
+                        chamado.getUsuario().getId()
                 ));
     }
 
@@ -103,8 +99,7 @@ public class ChamadoService {
                         chamado.getStatus(),
                         chamado.getDataCriacao(),
                         chamado.getDataAtualizacao(),
-                        chamado.getUsuario().getId(),
-                        chamado.getTecnico() != null ? chamado.getTecnico().getId() : null
+                        chamado.getUsuario().getId()
                 ))
                 .collect(Collectors.toList());
     }
@@ -126,13 +121,7 @@ public class ChamadoService {
         if (atualizarChamadoDTO.prioridade() != null) {
             chamado.setPrioridade(Prioridade.valueOf(atualizarChamadoDTO.prioridade()));
         }
-        if (atualizarChamadoDTO.tecnicoID() != null) {
-            Tecnico tecnico = tecnicoRepository.findById(atualizarChamadoDTO.tecnicoID())
-                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
-            chamado.setTecnico(tecnico);
-            descricaoEvento.append("técnico atribuído: ").append(tecnico.getNome()).append(". ");
 
-        }
         chamado.setDataAtualizacao(LocalDateTime.now());
 
         chamadoRepository.save(chamado);
