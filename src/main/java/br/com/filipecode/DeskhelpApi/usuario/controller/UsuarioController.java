@@ -35,16 +35,29 @@ public class UsuarioController {
             @ApiResponse(responseCode = "409", description = "Registro duplicado!")
     })
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioService.salvarUsuario(usuarioDTO);
+    public ResponseEntity<UsuarioRespostaDTO> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+        UsuarioRespostaDTO usuario = usuarioService.salvarUsuario(usuarioDTO);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(usuario.getId())
+                .buildAndExpand(usuario.id())
                 .toUri();
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(usuario);
+    }
+
+    @PostMapping("/tecnicos")
+    public ResponseEntity<UsuarioRespostaDTO> criarTecnico(@RequestBody @Valid UsuarioDTO usuarioDTO) {
+        UsuarioRespostaDTO tecnico = usuarioService.salvarTecnico(usuarioDTO);
+
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(tecnico.id())
+                .toUri();
+
+        return ResponseEntity.created(uri).body(tecnico);
     }
 
     @PutMapping("{id}")

@@ -23,7 +23,8 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioValidator usuarioValidator;
 
-    public Usuario salvarUsuario(UsuarioDTO usuarioDTO) {
+    public UsuarioRespostaDTO salvarUsuario(UsuarioDTO usuarioDTO) {
+        usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
 
         Usuario usuario = new Usuario();
         usuario.setNome(usuarioDTO.nome());
@@ -32,8 +33,24 @@ public class UsuarioService {
         usuario.setDepartamento(usuarioDTO.departamento());
         usuario.setCargo(usuarioDTO.cargo());
 
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+
+        return mapearParaRespostaDTO(usuarioSalvo);
+    }
+
+    public UsuarioRespostaDTO salvarTecnico(UsuarioDTO usuarioDTO) {
         usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
-        return usuarioRepository.save(usuario);
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setEmail(usuarioDTO.email());
+        usuario.setRole(Role.TECNICO);
+        usuario.setDepartamento(usuarioDTO.departamento());
+        usuario.setCargo(usuarioDTO.cargo());
+
+        Usuario usuarioSalvo = usuarioRepository.save(usuario);
+
+        return mapearParaRespostaDTO(usuarioSalvo);
     }
 
     public Usuario atualizarUsuario(UUID id, AtualizarUsuarioDTO dto) {
@@ -62,14 +79,7 @@ public class UsuarioService {
     public Optional<UsuarioRespostaDTO> buscarDetalhesPorId(UUID id) {
         usuarioValidator.validarUsuarioExiste(id);
          return usuarioRepository.findById(id)
-                 .map(usuario -> new UsuarioRespostaDTO(
-                         usuario.getId(),
-                         usuario.getNome(),
-                         usuario.getEmail(),
-                         usuario.getRole(),
-                         usuario.getDepartamento(),
-                         usuario.getCargo()
-                 ));
+                 .map(this::mapearParaRespostaDTO);
     }
 
     public List<UsuarioRespostaDTO> filtrarUsuario(String nome, String departamento) {
@@ -85,14 +95,18 @@ public class UsuarioService {
             usuarios = usuarioRepository.findAll();
         }
         return usuarios.stream()
-                .map(usuario -> new UsuarioRespostaDTO(
-                        usuario.getId(),
-                        usuario.getNome(),
-                        usuario.getEmail(),
-                        usuario.getRole(),
-                        usuario.getDepartamento(),
-                        usuario.getCargo()
-                ))
+                .map(this::mapearParaRespostaDTO)
                 .collect(Collectors.toList());
+    }
+
+    private UsuarioRespostaDTO mapearParaRespostaDTO(Usuario usuario) {
+        return new UsuarioRespostaDTO(
+                usuario.getId(),
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getRole(),
+                usuario.getDepartamento(),
+                usuario.getCargo()
+        );
     }
 }
