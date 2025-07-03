@@ -28,14 +28,7 @@ public class UsuarioService {
     public UsuarioRespostaDTO salvarUsuario(UsuarioDTO usuarioDTO) {
         usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
 
-        Usuario usuario = new Usuario();
-        usuario.setNome(usuarioDTO.nome());
-        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
-        usuario.setEmail(usuarioDTO.email());
-        usuario.setRole(Role.USUARIO);
-        usuario.setDepartamento(usuarioDTO.departamento());
-        usuario.setCargo(usuarioDTO.cargo());
-
+        Usuario usuario = mapearParaEntidade(usuarioDTO, Role.USUARIO);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         return mapearParaRespostaDTO(usuarioSalvo);
@@ -44,31 +37,19 @@ public class UsuarioService {
     public UsuarioRespostaDTO salvarTecnico(UsuarioDTO usuarioDTO) {
         usuarioValidator.validarEmailDuplicado(usuarioDTO.email());
 
-        Usuario usuario = new Usuario();
-        usuario.setNome(usuarioDTO.nome());
-        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
-        usuario.setEmail(usuarioDTO.email());
-        usuario.setRole(Role.TECNICO);
-        usuario.setDepartamento(usuarioDTO.departamento());
-        usuario.setCargo(usuarioDTO.cargo());
-
+        Usuario usuario = mapearParaEntidade(usuarioDTO, Role.TECNICO);
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         return mapearParaRespostaDTO(usuarioSalvo);
     }
 
-    public Usuario atualizarUsuario(UUID id, AtualizarUsuarioDTO dto) {
+    public Usuario atualizarUsuario(UUID id, AtualizarUsuarioDTO atualizarUsuarioDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
-            usuario.setNome(dto.nome());
-            usuario.setSenha(passwordEncoder.encode(dto.senha()));
-            usuario.setEmail(dto.email());
-            usuario.setRole(dto.role());
-            usuario.setDepartamento(dto.departamento());
-            usuario.setCargo(dto.cargo());
+        mapearParaAtualizacaoDTO(usuario, atualizarUsuarioDTO);
 
-            return usuarioRepository.save(usuario);
+        return usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> listarPorId(UUID id) {
@@ -113,5 +94,28 @@ public class UsuarioService {
                 usuario.getDepartamento(),
                 usuario.getCargo()
         );
+    }
+
+    private Usuario mapearParaEntidade(UsuarioDTO usuarioDTO, Role role) {
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNome(usuarioDTO.nome());
+        usuario.setSenha(passwordEncoder.encode(usuarioDTO.senha()));
+        usuario.setEmail(usuarioDTO.email());
+        usuario.setRole(role);
+        usuario.setDepartamento(usuarioDTO.departamento());
+        usuario.setCargo(usuarioDTO.cargo());
+
+        return usuario;
+    }
+
+    private void mapearParaAtualizacaoDTO(Usuario usuario, AtualizarUsuarioDTO atualizarUsuarioDTO) {
+        usuario.setNome(atualizarUsuarioDTO.nome());
+        usuario.setSenha(passwordEncoder.encode(atualizarUsuarioDTO.senha()));
+        usuario.setEmail(atualizarUsuarioDTO.email());
+        usuario.setRole(atualizarUsuarioDTO.role());
+        usuario.setDepartamento(atualizarUsuarioDTO.departamento());
+        usuario.setCargo(atualizarUsuarioDTO.cargo());
     }
 }
