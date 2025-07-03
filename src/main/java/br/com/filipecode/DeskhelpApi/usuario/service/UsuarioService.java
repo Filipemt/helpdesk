@@ -68,15 +68,19 @@ public class UsuarioService {
                  .map(this::mapearParaRespostaDTO);
     }
 
-    public List<UsuarioRespostaDTO> filtrarUsuario(String nome, String departamento) {
+    public List<UsuarioRespostaDTO> filtrarUsuario(String nome, String email, String departamento, Role role) {
         List<Usuario> usuarios;
 
         if (nome != null && departamento != null) {
             usuarios = usuarioRepository.findByNomeAndDepartamento(nome, departamento);
         } else if (nome != null) {
             usuarios = usuarioRepository.findByNome(nome);
+        } else if (email != null) {
+            usuarios = usuarioRepository.findByEmail(email);
         } else if (departamento != null) {
             usuarios = usuarioRepository.findByDepartamento(departamento);
+        } else if (role != null) {
+            usuarios = usuarioRepository.findAllByRole(role);
         } else {
             usuarios = usuarioRepository.findAll();
         }

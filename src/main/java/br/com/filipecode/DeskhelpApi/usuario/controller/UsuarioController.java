@@ -4,6 +4,7 @@ import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
+import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import br.com.filipecode.DeskhelpApi.usuario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -94,9 +95,11 @@ public class UsuarioController {
     })
     @GetMapping
     public ResponseEntity<List<UsuarioRespostaDTO>> buscarTodosOsUsuarios(@RequestParam(value = "nome", required = false) String nome,
-                                                                          @RequestParam(value = "departamento", required = false) String departamento) {
+                                                                          @RequestParam(value = "departamento", required = false) String departamento,
+                                                                          @RequestParam(value = "email", required = false) String email,
+                                                                          @RequestParam(value = "role", required = false) Role role) {
 
-        List<UsuarioRespostaDTO> lista = usuarioService.filtrarUsuario(nome, departamento);
+        List<UsuarioRespostaDTO> lista = usuarioService.filtrarUsuario(nome, email, departamento, role);
         return ResponseEntity.ok(lista);
     }
 
