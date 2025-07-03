@@ -1,9 +1,9 @@
-package br.com.filipecode.DeskhelpApi.tecnico.controller;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.controller;
 
-import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoDTO;
-import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoRespostaDTO;
-import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
-import br.com.filipecode.DeskhelpApi.tecnico.service.TecnicoService;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.dto.TecnicoDTO;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.dto.TecnicoRespostaDTO;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.entity.Tecnico;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.service.TecnicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RestController
+
 @RequestMapping("tecnicos")
 @RequiredArgsConstructor
 public class TecnicoController {

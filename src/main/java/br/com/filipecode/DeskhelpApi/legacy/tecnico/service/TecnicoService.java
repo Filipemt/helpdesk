@@ -1,11 +1,11 @@
-package br.com.filipecode.DeskhelpApi.tecnico.service;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.service;
 
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
-import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoDTO;
-import br.com.filipecode.DeskhelpApi.tecnico.dto.TecnicoRespostaDTO;
-import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
-import br.com.filipecode.DeskhelpApi.tecnico.repository.TecnicoRepository;
-import br.com.filipecode.DeskhelpApi.tecnico.validator.TecnicoValidator;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.dto.TecnicoDTO;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.dto.TecnicoRespostaDTO;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.entity.Tecnico;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.repository.TecnicoRepository;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.validator.TecnicoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

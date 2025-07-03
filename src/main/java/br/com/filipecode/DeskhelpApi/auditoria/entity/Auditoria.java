@@ -22,9 +22,6 @@ public class Auditoria {
     private UUID chamadoId;
     private String tituloChamado;
 
-    private UUID tecnicoId;
-    private String nomeTecnico;
-
     private UUID usuarioId;
     private String nomeUsuario;
 

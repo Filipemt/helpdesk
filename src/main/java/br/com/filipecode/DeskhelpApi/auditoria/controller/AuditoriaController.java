@@ -28,18 +28,17 @@ public class AuditoriaController {
             summary = "Filtra histórico de chamados",
             description = "Lista histórico de chamados")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Filtra histórico de chamados por status, tecnicoId, usuarioId, dataInicial e dataFinal, caso não seja passado nenhum parâmetro, lista todo histórico de chamados"),
+            @ApiResponse(responseCode = "200", description = "Filtra histórico de chamados por status, usuarioId, dataInicial e dataFinal, caso não seja passado nenhum parâmetro, lista todo histórico de chamados"),
     })
     @GetMapping
     public ResponseEntity<List<HistoricoChamadoDTO>> listarHistoricoAgrupadoComFiltro(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) UUID tecnicoId,
             @RequestParam(required = false) UUID usuarioId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInicial,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataFinal
     ) {
         List<HistoricoChamadoDTO> historico = auditoriaService.listarHistoricoAgrupadoComFiltro(
-                status, tecnicoId, usuarioId, dataInicial, dataFinal
+                status, usuarioId, dataInicial, dataFinal
         );
         return ResponseEntity.ok(historico);
     }

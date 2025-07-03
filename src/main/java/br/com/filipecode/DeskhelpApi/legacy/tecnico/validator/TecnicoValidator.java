@@ -1,8 +1,8 @@
-package br.com.filipecode.DeskhelpApi.tecnico.validator;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.validator;
 
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
-import br.com.filipecode.DeskhelpApi.tecnico.repository.TecnicoRepository;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.repository.TecnicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

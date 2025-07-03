@@ -1,4 +1,4 @@
-package br.com.filipecode.DeskhelpApi.tecnico.entity;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

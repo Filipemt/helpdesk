@@ -1,7 +1,7 @@
-package br.com.filipecode.DeskhelpApi.tecnico.repository;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.repository;
 
 
-import br.com.filipecode.DeskhelpApi.tecnico.entity.Tecnico;
+import br.com.filipecode.DeskhelpApi.legacy.tecnico.entity.Tecnico;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -16,8 +16,6 @@ public record ChamadoRespostaDTO(
         Status status,
         LocalDateTime dataCriacao,
         LocalDateTime dataAtualizacao,
-        UUID usuarioId,
-        UUID tecnicoId
-) {
+        UUID usuarioId) {
 
 }

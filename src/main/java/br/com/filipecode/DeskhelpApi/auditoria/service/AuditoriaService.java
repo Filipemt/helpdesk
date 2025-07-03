@@ -28,11 +28,6 @@ public class AuditoriaService {
         auditoria.setUsuarioId(chamado.getUsuario().getId());
         auditoria.setNomeUsuario(chamado.getUsuario().getNome());
 
-        if (chamado.getTecnico() != null) {
-            auditoria.setTecnicoId(chamado.getTecnico().getId());
-            auditoria.setNomeTecnico(chamado.getTecnico().getNome());
-        }
-
         auditoria.setStatus(chamado.getStatus());
         auditoria.setDescricaoEvento(descricaoEvento);
         auditoria.setDataEvento(LocalDateTime.now());
@@ -42,7 +37,6 @@ public class AuditoriaService {
 
     public List<HistoricoChamadoDTO> listarHistoricoAgrupadoComFiltro(
             String status,
-            UUID tecnicoId,
             UUID usuarioId,
             LocalDateTime dataInicial,
             LocalDateTime dataFinal
@@ -52,7 +46,6 @@ public class AuditoriaService {
         // Aplica os filtros antes de agrupar
         List<Auditoria> filtradas = auditorias.stream()
                 .filter(a -> status == null || a.getStatus().name().equalsIgnoreCase(status))
-                .filter(a -> tecnicoId == null || tecnicoId.equals(a.getTecnicoId()))
                 .filter(a -> usuarioId == null || usuarioId.equals(a.getUsuarioId()))
                 .filter(a -> dataInicial == null || !a.getDataEvento().isBefore(dataInicial))
                 .filter(a -> dataFinal == null || !a.getDataEvento().isAfter(dataFinal))

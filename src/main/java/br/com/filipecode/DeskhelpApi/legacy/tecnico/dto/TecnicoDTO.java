@@ -1,4 +1,4 @@
-package br.com.filipecode.DeskhelpApi.tecnico.dto;
+package br.com.filipecode.DeskhelpApi.legacy.tecnico.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

@@ -6,6 +6,7 @@ import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
 import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeException;
+import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
