@@ -1,7 +1,5 @@
 package br.com.filipecode.DeskhelpApi.shared.dto;
 
-import java.time.Instant;
-
 public record ErroPadronizadoDTO(
         int status,
         String erro,
