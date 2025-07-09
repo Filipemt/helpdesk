@@ -1,7 +1,10 @@
 package br.com.filipecode.DeskhelpApi.security.config;
 
 import br.com.filipecode.DeskhelpApi.security.user.CustomUserDetailsService;
+import br.com.filipecode.DeskhelpApi.shared.handler.CustomAccessDeniedHandler;
+import br.com.filipecode.DeskhelpApi.shared.handler.CustomAuthenticationEntryPointHandler;
 import br.com.filipecode.DeskhelpApi.usuario.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,11 +22,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationEntryPointHandler authenticationEntryPointHandler;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(this.authenticationEntryPointHandler)
+                        .accessDeniedHandler(this.accessDeniedHandler)
+                )
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(formLogin -> formLogin.disable())

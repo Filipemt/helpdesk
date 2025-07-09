@@ -1,5 +1,8 @@
-package br.com.filipecode.DeskhelpApi.shared.exceptions;
+package br.com.filipecode.DeskhelpApi.shared.handler;
 
+import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
