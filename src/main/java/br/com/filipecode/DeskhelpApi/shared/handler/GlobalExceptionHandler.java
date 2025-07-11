@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.time.Instant;
 import java.util.HashMap;
@@ -101,6 +102,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(erro(HttpStatus.BAD_REQUEST,
                         "Parâmetro obrigatório ausente",
+                        exception.getMessage(),
+                        request));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErroPadronizadoDTO> handleInternalServerError(HttpServerErrorException.InternalServerError exception, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(erro(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Erro interno. Entre em contato com a administração do sistema",
                         exception.getMessage(),
                         request));
     }
