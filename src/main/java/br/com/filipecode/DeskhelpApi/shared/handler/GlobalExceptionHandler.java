@@ -7,6 +7,8 @@ import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeExcep
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,17 +17,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-// todo: Tratar erro quando o Json body é mal formatado, por exemplo a virgula
-//  {
-//    "nome": "teste",
-//    "senha": "teste",
-//    "email": "teste@gmail.com", <-
-//  }
-
-// todo: tratar erro quando alguém tenta acessar um endpoint com um método HTTP não permitido
-
-// todo: quando um parâmetro obrigatório não é informado (ex: ?id=).
-
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -33,21 +24,30 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroPadronizadoDTO> handleRegistroDuplicado(RegistroDuplicadoException exception, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(erro(HttpStatus.CONFLICT, "Registro duplicado", exception.getMessage(), request));
+                .body(erro(HttpStatus.CONFLICT,
+                        "Registro duplicado",
+                        exception.getMessage(),
+                        request));
     }
 
     @ExceptionHandler
     public ResponseEntity<ErroPadronizadoDTO> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException exception, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(erro(HttpStatus.NOT_FOUND, "Registro não encontrado", exception.getMessage(), request));
+                .body(erro(HttpStatus.NOT_FOUND,
+                        "Registro não encontrado",
+                        exception.getMessage(),
+                        request));
     }
 
     @ExceptionHandler
     public ResponseEntity<ErroPadronizadoDTO> handleRequisicaoInvalida(RequisicaoInvalidadeException exception, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(erro(HttpStatus.BAD_REQUEST, "Requisição inválida", exception.getMessage(), request));
+                .body(erro(HttpStatus.BAD_REQUEST,
+                        "Requisição inválida",
+                        exception.getMessage(),
+                        request));
     }
 
     @ExceptionHandler
@@ -73,6 +73,36 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erroDTO);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErroPadronizadoDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(erro(HttpStatus.BAD_REQUEST,
+                        "Erro de formatação JSON",
+                        "Não foi possível interpretar o corpo da requisição. Verifique se o JSON está corretamente estruturado.", request));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErroPadronizadoDTO> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.METHOD_NOT_ALLOWED)
+                .body(erro(
+                        HttpStatus.METHOD_NOT_ALLOWED,
+                        "Método HTTP não permitido",
+                        "O método " + exception.getMethod() + " não é suportado para este endpoint.",
+                        request
+                ));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErroPadronizadoDTO> handleIllegalArgument(IllegalArgumentException exception, HttpServletRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(erro(HttpStatus.BAD_REQUEST,
+                        "Parâmetro obrigatório ausente",
+                        exception.getMessage(),
+                        request));
     }
 
     private ErroPadronizadoDTO erro(HttpStatus status, String titulo, String mensagem, HttpServletRequest request) {
