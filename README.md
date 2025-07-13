@@ -52,13 +52,13 @@ src/main/java/br/com/filipecode/DeskhelpApi/
 Este projeto é organizado em sprints, seguindo um roadmap técnico de implementação.  
 As tarefas são gerenciadas no **GitHub Projects (Kanban)** e divididas em:
 
-| Sprint | Objetivo principal                            | Status      |
-|--------|-----------------------------------------------|-------------|
-| Sprint 1 | Refatoração de Usuário e papel (Role)         | ✅ Em andamento |
-| Sprint 2 | Autenticação com Spring Security (sem JWT)    | 🔜 Planejada |
-| Sprint 3 | JWT Token e autenticação stateless            | 🔜 Planejada |
-| Sprint 4 | Autorização baseada em papel (role-based)     | 🔜 Planejada |
-| Sprint 5 | Melhorias avançadas de segurança              | 🔜 Opcional  |
+| Sprint | Objetivo principal                            | Status          |
+|--------|-----------------------------------------------|-----------------|
+| Sprint 1 | Refatoração de Usuário e papel (Role)         | ✅ Concluído     |
+| Sprint 2 | Autenticação com Spring Security (sem JWT)    | ✅ Concluído     |
+| Sprint 3 | JWT Token e autenticação stateless            | 🔜 Em andamento |
+| Sprint 4 | Autorização baseada em papel (role-based)     | 🔜 Planejada    |
+| Sprint 5 | Melhorias avançadas de segurança              | 🔜 Opcional     |
 
 ---
 
