@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -35,6 +36,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "409", description = "Registro duplicado!")
     })
     @PostMapping
+    @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")
     public ResponseEntity<UsuarioRespostaDTO> criarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         UsuarioRespostaDTO usuario = usuarioService.salvarUsuario(usuarioDTO);
 
@@ -48,6 +50,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/tecnicos")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UsuarioRespostaDTO> criarTecnico(@RequestBody @Valid UsuarioDTO usuarioDTO) {
         UsuarioRespostaDTO tecnico = usuarioService.salvarTecnico(usuarioDTO);
 
@@ -61,6 +64,7 @@ public class UsuarioController {
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")
     public ResponseEntity<Object> atualizarUsuario(@PathVariable String id,
                                                    @RequestBody @Valid AtualizarUsuarioDTO dto) {
         UUID usuarioId = UUID.fromString(id);
@@ -77,6 +81,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado!")
     })
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('USUARIO', 'TECNICO', 'ADMIN')")
     public ResponseEntity<Optional<UsuarioRespostaDTO>> buscarUsuarioPorId(@PathVariable String id) {
         UUID usuarioId = UUID.fromString(id);
         Optional<UsuarioRespostaDTO> usuarioRespostaDTO = usuarioService.buscarDetalhesPorId(usuarioId);
@@ -93,6 +98,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado!")
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('USUARIO', 'TECNICO', 'ADMIN')")
     public ResponseEntity<List<UsuarioRespostaDTO>> buscarTodosOsUsuarios(@RequestParam(value = "nome", required = false) String nome,
                                                                           @RequestParam(value = "departamento", required = false) String departamento,
                                                                           @RequestParam(value = "email", required = false) String email,
@@ -110,6 +116,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado!")
     })
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")
     public ResponseEntity<Void> deletarUsuario(@PathVariable String id) {
         UUID usuarioId = UUID.fromString(id);
 
