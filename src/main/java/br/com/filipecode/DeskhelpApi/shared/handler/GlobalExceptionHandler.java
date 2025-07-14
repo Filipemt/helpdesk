@@ -3,7 +3,7 @@ package br.com.filipecode.DeskhelpApi.shared.handler;
 import br.com.filipecode.DeskhelpApi.shared.dto.ErroPadronizadoDTO;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
-import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeException;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidaException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErroPadronizadoDTO> handleRequisicaoInvalida(RequisicaoInvalidadeException exception, HttpServletRequest request) {
+    public ResponseEntity<ErroPadronizadoDTO> handleRequisicaoInvalida(RequisicaoInvalidaException exception, HttpServletRequest request) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(erro(HttpStatus.BAD_REQUEST,
