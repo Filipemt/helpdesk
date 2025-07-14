@@ -1,6 +1,7 @@
 package br.com.filipecode.DeskhelpApi.usuario.controller;
 
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioParcialDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
@@ -62,6 +63,17 @@ public class UsuarioController {
 
         return ResponseEntity.created(uri).body(tecnico);
     }
+
+    @PatchMapping("{id}")
+    @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")
+    public ResponseEntity<Void> atualizarUsuarioParcial(@PathVariable String id,
+                                                        @RequestBody @Valid AtualizarUsuarioParcialDTO dto) {
+        UUID usuarioId = UUID.fromString(id);
+        usuarioService.atualizarUsuarioParcial(usuarioId, dto);
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     @PutMapping("{id}")
     @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")

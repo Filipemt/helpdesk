@@ -1,7 +1,9 @@
 package br.com.filipecode.DeskhelpApi.usuario.service;
 
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.RegistroDuplicadoException;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioDTO;
+import br.com.filipecode.DeskhelpApi.usuario.dto.request.AtualizarUsuarioParcialDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.request.UsuarioDTO;
 import br.com.filipecode.DeskhelpApi.usuario.dto.response.UsuarioRespostaDTO;
 import br.com.filipecode.DeskhelpApi.usuario.entity.Usuario;
@@ -43,13 +45,46 @@ public class UsuarioService {
         return mapearParaRespostaDTO(usuarioSalvo);
     }
 
-    public Usuario atualizarUsuario(UUID id, AtualizarUsuarioDTO atualizarUsuarioDTO) {
+    public void atualizarUsuario(UUID id, AtualizarUsuarioDTO atualizarUsuarioDTO) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
 
         mapearParaAtualizacaoDTO(usuario, atualizarUsuarioDTO);
 
-        return usuarioRepository.save(usuario);
+        usuarioRepository.save(usuario);
+    }
+
+    public void atualizarUsuarioParcial(UUID id, AtualizarUsuarioParcialDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Usuário não encontrado"));
+
+
+        if (dto.nome() != null) {
+            usuario.setNome(dto.nome());
+        }
+        if (dto.senha() != null) {
+            usuario.setSenha(passwordEncoder.encode(dto.senha()));
+        }
+        if (dto.email() != null && !dto.email().equals(usuario.getEmail())) {
+            boolean emailJaUsado = usuarioRepository.existsByEmail(dto.email());
+
+            if (emailJaUsado) {
+                throw new RegistroDuplicadoException("Já existe um usuário com este e-mail");
+            }
+
+            usuario.setEmail(dto.email());
+        }
+        if (dto.role() != null) {
+            usuario.setRole(dto.role());
+        }
+        if (dto.departamento() != null) {
+            usuario.setDepartamento(dto.departamento());
+        }
+        if (dto.cargo() != null) {
+            usuario.setCargo(dto.cargo());
+        }
+
+        usuarioRepository.save(usuario);
     }
 
     public Optional<Usuario> listarPorId(UUID id) {
