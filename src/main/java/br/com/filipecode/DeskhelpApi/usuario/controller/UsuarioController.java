@@ -77,7 +77,7 @@ public class UsuarioController {
 
     @PutMapping("{id}")
     @PreAuthorize("hasAnyRole('TECNICO', 'ADMIN')")
-    public ResponseEntity<Object> atualizarUsuario(@PathVariable String id,
+    public ResponseEntity<Void> atualizarUsuario(@PathVariable String id,
                                                    @RequestBody @Valid AtualizarUsuarioDTO dto) {
         UUID usuarioId = UUID.fromString(id);
         usuarioService.atualizarUsuario(usuarioId, dto);
