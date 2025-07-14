@@ -5,8 +5,7 @@ import br.com.filipecode.DeskhelpApi.chamado.repository.ChamadoRepository;
 
 import br.com.filipecode.DeskhelpApi.chamado.enums.Status;
 import br.com.filipecode.DeskhelpApi.shared.exceptions.EntidadeNaoEncontradaException;
-import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidadeException;
-import br.com.filipecode.DeskhelpApi.usuario.enums.Role;
+import br.com.filipecode.DeskhelpApi.shared.exceptions.RequisicaoInvalidaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ public class ChamadoValidador {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Chamado não encontrado!"));
 
         if (chamado.getStatus() == Status.CONCLUIDO) {
-            throw new RequisicaoInvalidadeException("Chamado já foi concluido e não pode ser alterado!");
+            throw new RequisicaoInvalidaException("Chamado já foi concluido e não pode ser alterado!");
         }
 
         return chamado;
